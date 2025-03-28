@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Parking Slot</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    body {
+      background-color: #111;
+      color: #d4af37;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: black;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #d4af37;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #d4af37;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #d4af37;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Book a Parking Slot</h2>
+  <form id="bookingForm">
+    <input type="text" id="vehicleNumber" placeholder="Vehicle Number" required>
+    <input type="date" id="date" required>
+    <input type="time" id="entryTime" required>
+    <input type="time" id="exitTime" required>
+    <input type="text" id="slotNumber" placeholder="Slot Number" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    document.getElementById('bookingForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const vehicleNumber = document.getElementById('vehicleNumber').value;
+      const date = document.getElementById('date').value;
+      const entryTime = document.getElementById('entryTime').value;
+      const exitTime = document.getElementById('exitTime').value;
+      const slotNumber = document.getElementById('slotNumber').value;
+
+      const response = await fetch('http://localhost:5000/add-vehicle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ vehicleNumber, date, entryTime, exitTime, slotNumber })
+      });
+
+      const result = await response.json();
+      document.getElementById('message').innerText = result.message || 'Error';
+    });
+  </script>
+
+</body>
+</html>
